@@ -30,28 +30,22 @@ public class Atm {
     void drawItemMenu(Menus menus) {
         switch (menus) {
             case INPUT_CARD:
-                System.out.format("""
-                        \tPlease insert your Card!\t
-                        1 - insert card
-                        2 - not insert a card
-                        """);
+                System.out.format("\tPlease insert your Card!\t\n" +
+                        "1 - insert card\n" +
+                        "2 - not insert a card\n");
                 break;
             case MAIN_MENU:
-                System.out.format("""
-                        \tPrint balance or get money?\t
-                        1 - view balance
-                        2 - get money
-                        3 - exit. Return card
-                        """);
+                System.out.format("\tPrint balance or get money?\t\n" +
+                        "1 - view balance\n" +
+                        "2 - get money\n" +
+                        "3 - exit. Return card\n");
                 break;
             case CHECK_BALANCE:
-                System.out.format("""
-                        \tCheck balance:\t
-                        1 - Draw check on screen
-                        2 - Print a paper check
-                        3 - return to previous menu
-                        4 - exit. Return card
-                        """);
+                System.out.format("\tCheck balance:\t\n" +
+                        "1 - Draw check on screen\n" +
+                        "2 - Print a paper check\n" +
+                        "3 - return to previous menu\n" +
+                        "4 - exit. Return card\n");
                 break;
             case GET_MONEY:
                 System.out.format("\tGet Money. Select amount:\t\n" +
@@ -61,32 +55,24 @@ public class Atm {
                         "4 - " + FIFTH_HUNDRED + " usd" + "\t\t8 - exit. Return card\n");
                 break;
             case ASK_PRINT_CHECK:
-                System.out.format("""
-                        \tDo you want print check?\t
-                        "1 - Print check
-                        "2 - Don't print check. Save forest
-                        """);
+                System.out.format("\tDo you want print check?\t\n" +
+                        "1 - Print check\n" +
+                        "2 - Don't print check. Save forest\n");
                 break;
             case RETURN_MAIN_MENU:
-                System.out.format("""
-                        \tWhat do you want?\t
-                        1 - return to Main Menu
-                        2 - exit. Return card
-                        """);
+                System.out.format("\tWhat do you want?\t\n" +
+                        "1 - return to Main Menu\n" +
+                        "2 - exit. Return card\n");
                 break;
             case OUT_OF_PAPER:
-                System.out.format("""
-                        The ATM has run out of paper.
-                        Do you want to continue without printing a receipt?
-                        1 - continue without check
-                        2 - cancel and exit
-                        """);
+                System.out.format("The ATM has run out of paper.\n" +
+                        "Do you want to continue without printing a receipt?\n" +
+                        "1 - continue without check\n" +
+                        "2 - cancel and exit\n");
                 break;
             case EXIT:
-                System.out.format("""
-                        \tCompletion of work.\t
-                        Don't forget to pick up the card
-                        """);
+                System.out.format("\tCompletion of work.\t\n" +
+                        "Don't forget to pick up the card");
                 break;
         }
     }
