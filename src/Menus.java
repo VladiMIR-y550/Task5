@@ -6,5 +6,5 @@ public enum Menus {
     ASK_PRINT_CHECK,
     RETURN_MAIN_MENU,
     OUT_OF_PAPER,
-    EXIT
+    EXIT,
 }
