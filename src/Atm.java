@@ -59,21 +59,64 @@ public class Atm {
                         "1 - Print check\n" +
                         "2 - Don't print check. Save forest\n");
                 break;
+            case OUT_OF_PAPER:
+                System.out.format("\t!!! The ATM has run out of paper !!!\n" +
+                        "Do you want to continue without printing a receipt?\n" +
+                        "1 - continue without check\n" +
+                        "2 - cancel and exit\n");
+                break;
             case RETURN_MAIN_MENU:
                 System.out.format("\tWhat do you want?\t\n" +
                         "1 - return to Main Menu\n" +
                         "2 - exit. Return card\n");
                 break;
-            case OUT_OF_PAPER:
-                System.out.format("The ATM has run out of paper.\n" +
-                        "Do you want to continue without printing a receipt?\n" +
-                        "1 - continue without check\n" +
-                        "2 - cancel and exit\n");
-                break;
             case EXIT:
                 System.out.format("\tCompletion of work.\t\n" +
                         "Don't forget to pick up the card");
                 break;
+            default:
+                break;
+        }
+    }
+
+    void launchMenu(String runMenuItem) {
+        switch (runMenuItem) {
+            case "cardInside":
+                drawItemMenu(Menus.INPUT_CARD);
+                setCardInside(inputCard(checkInputItem.validationNumberMenuItem(2)));
+                break;
+            case "getMoney":
+                drawItemMenu(Menus.GET_MONEY);
+                getMoney(checkInputItem.validationNumberMenuItem(8));
+                break;
+            case "checkBalance":
+                drawItemMenu(Menus.CHECK_BALANCE);
+                checkBalance(checkInputItem.validationNumberMenuItem(4));
+                break;
+            case "returnMainMenu":
+                drawItemMenu(Menus.RETURN_MAIN_MENU);
+                returnMainMenu(checkInputItem.validationNumberMenuItem(2));
+                break;
+            case "mainMenu":
+                drawItemMenu(Menus.MAIN_MENU);
+                mainMenu(checkInputItem.validationNumberMenuItem(3));
+                break;
+            case "exit":
+                drawItemMenu(Menus.EXIT);
+                setCardInside(false);
+                break;
+            default:
+                break;
+        }
+    }
+
+    void launchMenu(String runMenuItem, int choiceAmount) {
+        if (runMenuItem.equals("askPrintCheck")) {
+            drawItemMenu(Menus.ASK_PRINT_CHECK);
+            askPrintCheck(checkInputItem.validationNumberMenuItem(2), choiceAmount);
+        } else if (runMenuItem.equals("outOfPaper")) {
+            drawItemMenu(Menus.OUT_OF_PAPER);
+            outOfPaper(checkInputItem.validationNumberMenuItem(2), choiceAmount);
         }
     }
 
@@ -83,103 +126,106 @@ public class Atm {
 
     void mainMenu(int selectedMenuItem) {
         if (selectedMenuItem == 1) {
-            drawItemMenu(Menus.CHECK_BALANCE);
-            checkBalance(checkInputItem.validationNumberMenuItem(4));
+            launchMenu("checkBalance");
         } else if (selectedMenuItem == 2) {
-            drawItemMenu(Menus.GET_MONEY);
-            getMoney(checkInputItem.validationNumberMenuItem(8));
+            launchMenu("getMoney");
         } else if (selectedMenuItem == 3) {
-            drawItemMenu(Menus.EXIT);
-            setCardInside(false);
+            launchMenu("exit");
         }
     }
 
     void checkBalance(int selectedMenuItem) {
+        switch (selectedMenuItem) {
+            case 1:
+                System.out.println("Balance on your account " + getBalance());
+                launchMenu("returnMainMenu");
+                break;
+            case 2:
+                if (paperPresence) {
+                    System.out.println(toString());
+                    launchMenu("returnMainMenu");
+                } else {
+                    System.out.println("The ATM has run out of paper.\n");
+                    launchMenu("checkBalance");
+                }
+                break;
+            case 3:
+                launchMenu("mainMenu");
+                break;
+            case 4:
+                launchMenu("exit");
+                break;
+        }
+    }
+
+    void getMoney(int selectedMenuItem) {
+        switch (selectedMenuItem) {
+            case 1:
+                launchMenu("askPrintCheck", FIFTY);
+                break;
+            case 2:
+                launchMenu("askPrintCheck", ONE_HUNDRED);
+                break;
+            case 3:
+                launchMenu("askPrintCheck", TWO_HUNDRED);
+                break;
+            case 4:
+                launchMenu("askPrintCheck", FIFTH_HUNDRED);
+                break;
+            case 5:
+                launchMenu("askPrintCheck", ONE_THOUSAND);
+                break;
+            case 6:
+                System.out.println("Please input other amount: ");
+                int otherAmount = checkInputItem.validationOtherAmount(getBalance());
+                launchMenu("askPrintCheck", otherAmount);
+                break;
+            case 7:
+                launchMenu("mainMenu");
+                break;
+            case 8:
+                launchMenu("exit");
+                break;
+            default:
+                break;
+        }
+    }
+
+    void askPrintCheck(int selectedMenuItem, int amount) {
+        if ((selectedMenuItem == 1 && paperPresence) || selectedMenuItem == 2) {
+            makeChangeBalance(amount);
+            if (selectedMenuItem == 1) {
+                System.out.println(toString(amount));
+            }
+        } else {
+            launchMenu("outOfPaper", amount);
+        }
+        takeMoney(amount);
+    }
+
+    void outOfPaper(int selectedMenuItem, int amount) {
         if (selectedMenuItem == 1) {
-            System.out.println("Balance on your account " + getBalance());
-            drawItemMenu(Menus.RETURN_MAIN_MENU);
-            returnMainMenu(checkInputItem.validationNumberMenuItem(2));
-        } else if (selectedMenuItem == 2 && paperPresence) {
-            System.out.println(toString());
-            drawItemMenu(Menus.RETURN_MAIN_MENU);
-            returnMainMenu(checkInputItem.validationNumberMenuItem(2));
+            makeChangeBalance(amount);
         } else if (selectedMenuItem == 2) {
-            System.out.println("The ATM has run out of paper.\n");
-            drawItemMenu(Menus.CHECK_BALANCE);
-            checkBalance(checkInputItem.validationNumberMenuItem(4));
-        } else if (selectedMenuItem == 3) {
-            drawItemMenu(Menus.MAIN_MENU);
-            mainMenu(checkInputItem.validationNumberMenuItem(3));
-        } else if (selectedMenuItem == 4) {
-            drawItemMenu(Menus.EXIT);
             setCardInside(false);
         }
     }
 
     void returnMainMenu(int selectedMenuItem) {
         if (selectedMenuItem == 1) {
-            drawItemMenu(Menus.MAIN_MENU);
-            mainMenu(checkInputItem.validationNumberMenuItem(3));
+            launchMenu("mainMenu");
         } else if (selectedMenuItem == 2) {
-            drawItemMenu(Menus.EXIT);
-            setCardInside(false);
+            launchMenu("exit");
         }
     }
 
-    void getMoney(int selectedMenuItem) {
-        if (selectedMenuItem == 1) {
-            drawItemMenu(Menus.ASK_PRINT_CHECK);
-            askPrintCheck(checkInputItem.validationNumberMenuItem(2), FIFTY);
-        } else if (selectedMenuItem == 2) {
-            drawItemMenu(Menus.ASK_PRINT_CHECK);
-            askPrintCheck(checkInputItem.validationNumberMenuItem(2), ONE_HUNDRED);
-        } else if (selectedMenuItem == 3) {
-            drawItemMenu(Menus.ASK_PRINT_CHECK);
-            askPrintCheck(checkInputItem.validationNumberMenuItem(2), TWO_HUNDRED);
-        } else if (selectedMenuItem == 4) {
-            drawItemMenu(Menus.ASK_PRINT_CHECK);
-            askPrintCheck(checkInputItem.validationNumberMenuItem(2), FIFTH_HUNDRED);
-        } else if (selectedMenuItem == 5) {
-            drawItemMenu(Menus.ASK_PRINT_CHECK);
-            askPrintCheck(checkInputItem.validationNumberMenuItem(2), ONE_THOUSAND);
-        } else if (selectedMenuItem == 6) {
-            System.out.println("Please input other amount: ");
-            int otherAmount = checkInputItem.validationOtherAmount(getBalance());
-            drawItemMenu(Menus.ASK_PRINT_CHECK);
-            askPrintCheck(checkInputItem.validationNumberMenuItem(2), otherAmount);
-        } else if (selectedMenuItem == 7) {
-            drawItemMenu(Menus.MAIN_MENU);
-            mainMenu(checkInputItem.validationNumberMenuItem(3));
-        } else if (selectedMenuItem == 8) {
-            drawItemMenu(Menus.EXIT);
-            setCardInside(false);
-        }
+    void makeChangeBalance(int amount) {
+        setBalance(getBalance() - amount);
     }
 
-    void askPrintCheck(int selectedMenuItem, int amount) {
-        if (selectedMenuItem == 1 && paperPresence) {
-            setBalance(getBalance() - amount);
-            System.out.println(toString(amount));
-            System.out.format("\tTake the money " + amount + " usd\n" +
-                    "Don't forget the card after receiving the money.\n\n");
-        } else if (selectedMenuItem == 1) {
-            drawItemMenu(Menus.OUT_OF_PAPER);
-            outOfPaper(checkInputItem.validationNumberMenuItem(2), amount);
-        } else if (selectedMenuItem == 2) {
-            setBalance(getBalance() - amount);
-            System.out.format("\tTake the money " + amount + " usd\n" +
-                    "Don't forget the card after receiving the money.\n\n");
-        }
-    }
-
-    void outOfPaper(int selectedMenuItem, int amount) {
-        if (selectedMenuItem == 1) {
-            setBalance(getBalance() - amount);
-            System.out.format("\tTake the money " + amount + " usd\n" +
-                    "Don't forget the card after receiving the money.\n\n");
-        } else if (selectedMenuItem == 2) {
-            setCardInside(false);
-        }
+    void takeMoney(int amount) {
+        System.out.format("\tTake the money " + amount + " usd\n" +
+                "Don't forget the card after receiving the money.\n\n");
     }
 
     public String toString(int printSum) {
