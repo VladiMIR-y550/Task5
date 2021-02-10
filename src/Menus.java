@@ -1,0 +1,10 @@
+public enum Menus {
+    INPUT_CARD,
+    MAIN_MENU,
+    CHECK_BALANCE,
+    GET_MONEY,
+    ASK_PRINT_CHECK,
+    RETURN_MAIN_MENU,
+    OUT_OF_PAPER,
+    EXIT,
+}
